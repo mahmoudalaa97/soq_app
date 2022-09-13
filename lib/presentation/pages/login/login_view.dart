@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:soq_app/presentation/bloc/auth/login_bloc/login_cubit.dart';
 import 'package:soq_app/presentation/bloc/auth/login_bloc/login_states.dart';
-import 'package:soq_app/presentation/pages/layout/layout_view.dart';
+import 'package:soq_app/presentation/recources/route_manger.dart';
 import 'package:soq_app/presentation/recources/strings_manger.dart';
 import 'package:soq_app/presentation/widgets/widgets.dart';
 
@@ -20,8 +20,10 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userNameController =
+      TextEditingController(text: "abanoub100@gmail.com");
+  final TextEditingController _passwordController =
+      TextEditingController(text: "123456");
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +32,8 @@ class _LoginViewState extends State<LoginView> {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => const Layout()),
-                ),
-                (Route<dynamic> route) => false);
+            Navigator.pushNamedAndRemoveUntil(
+                context, Routes.layoutRoute, (Route<dynamic> route) => false);
           }
         },
         builder: (context, state) {

@@ -27,21 +27,20 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(LoginLoadingState());
     Either<Failure, Authentication> response =
         await loginUseCase.execute(LoginUseCaseInputs(email, password));
-    emit(
-      response.fold((faliure) {
-        if (kDebugMode) {
-          print(faliure.code);
-        }
-        if (kDebugMode) {
-          print(faliure.message);
-        }
-        return LoginErrorState(faliure.message);
-      }, (data) {
-        authentication = data;
-        _appPreferences.setUserToken(data.data!.token);
-        _appPreferences.setUserLoggedIn();
-        return LoginSuccessState(data);
-      }),
-    );
+
+    response.fold((faliure) {
+      if (kDebugMode) {
+        print(faliure.code);
+      }
+      if (kDebugMode) {
+        print(faliure.message);
+      }
+      emit(LoginErrorState(faliure.message));
+    }, (data) async{
+      authentication = data;
+     await  _appPreferences.setUserToken(data.data!.token);
+     await  _appPreferences.setUserLoggedIn();
+      emit(LoginSuccessState(data));
+    });
   }
 }
